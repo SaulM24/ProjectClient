@@ -7,9 +7,10 @@ import { HttpService } from '../../shared-service/http.service';
 export interface IBike {
   id?: number;
   image: string;
-  price: number;
-  quantity: number;
-  description: string;
+  price: string;
+  brand: string;
+  color: string;
+  size: string;
 }
 
 @Component({
@@ -21,7 +22,7 @@ export class CartComponent implements OnInit {
 
   bikes: Array<IBike> = [];
   myName = '';
-  cars: [any];
+  tshirts: [any];
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
@@ -31,53 +32,54 @@ export class CartComponent implements OnInit {
 
   async ngOnInit() {
     await this.refresh();
-    // this.createCar('car', { make: 'Tesla', model: 'X'});
-    //this.updateCar('car/id/1', { make: 'Ford', model: 'Fiesta'});
+    // this.createCar('tshirt', { make: 'Tesla', model: 'X'});
+    //this.updateCar('tshirt/id/1', { make: 'Ford', model: 'Fiesta'});
 
   }
 
   async refresh() {
-    this.cars = await this.getCars('car');
+    this.tshirts = await this.getTshirt('tshirt');
   }
 
-  //getCars('car');
-  async getCars(path: string) {
+  //getCars('tshirt');
+  async getTshirt(path: string) {
     const resp = await this.http.get(path);
     return resp;
   }
 
-  async createCar() {
-    const car = {
-      make: null,
-      model: null,
-      year: null
+  async createTshirt() {
+    const tshirt = {
+      brand: null,
+      color: null,
+      size: null,
+      price: null
     };
-    const resp = await this.http.post('car', car);
+    const resp = await this.http.post('tshirt', tshirt);
     if (resp) {
      // this.refresh();
-     this.cars.unshift(resp);
+     this.tshirts.unshift(resp);
     }
     else {
-      this.toastService.showToast('danger', 3000, 'Car creation failed!');
+      this.toastService.showToast('danger', 3000, 'Tshirt creation failed!');
     }
     return resp;
   }
 
-  async updateCar(car: any) {
-    const resp = await this.http.put(`car/id/${car.id}`, car);
+  async updateTshirt(tshirt: any) {
+    const resp = await this.http.put(`tshirt/id/${tshirt.id}`, tshirt);
     if (resp) {
-      this.toastService.showToast('success', 3000, 'Car updated successfully!');
+      this.toastService.showToast('success', 3000, 'Tshirt updated successfully!');
     }
     return resp;
   }
 
-  async removeCar(car: any, index: number) {
-    //this.cars.splice(index, 1);
-    const resp = await this.http.delete(`car/id/${car.id}`);
+  async removeTshirt(tshirt: any, index: number) {
+    //this.tshirts.splice(index, 1);
+    const resp = await this.http.delete(`tshirt/id/${tshirt.id}`);
     if (resp) {
       this.refresh();
     } else {
-      this.toastService.showToast('danger', 3000, 'Delete car failed!');
+      this.toastService.showToast('danger', 3000, 'Delete tshirt failed!');
     }
   }
 
